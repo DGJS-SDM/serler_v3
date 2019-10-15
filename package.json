@@ -1,0 +1,29 @@
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd BackEnd && node server.js\" \"cd FrontEnd && npm start\"",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DGJS-SDM/serler_v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DGJS-SDM/serler_v2/issues"
+  },
+  "homepage": "https://github.com/DGJS-SDM/serler_v2#readme",
+  "dependencies": {
+    "concurrently": "^4.1.2",
+    "react-scripts": "^3.1.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0"
+  }
+}

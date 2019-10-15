@@ -1,0 +1,10 @@
+.MTableToolbar-root-32 {
+  display: none !important;
+}
+h5 {
+  text-align: left;
+}
+.condition-row,
+.condition-row .row {
+  margin-bottom: 0px;
+}
