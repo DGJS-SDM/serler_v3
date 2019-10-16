@@ -102,7 +102,9 @@ class Home extends Component {
             { name: "Book", value: "Book" },
             { name: "Master thesis", value: "Master thesis" },
             { name: "Misc", value: "Misc" },
-            { name: "Phd thesis", value: "Phd thesis" }
+            { name: "Phd thesis", value: "Phd thesis" },
+            { name: "Conference", value: "Conference" },
+            { name: "Journal" , value: "Journal" }
           ]
         }
       ],
@@ -868,7 +870,7 @@ class Home extends Component {
       columns = [...columns, { title: "SE Method", field: "article_seMethod" }];
     }
     if (checkBox.author) {
-      columns = [...columns, { title: "Author", field: "article_author" }];
+      columns = [...columns, { title: "Author", field: "article_authors" }];
     }
     if (checkBox.doi) {
       columns = [...columns, { title: "DOI", field: "article_doi" }];
