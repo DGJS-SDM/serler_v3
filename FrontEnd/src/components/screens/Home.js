@@ -47,43 +47,43 @@ class Home extends Component {
           id: 3,
           name: "SE Method",
           option: [
-            { name: "BDD", value: "seMtd01" },
-            { name: "Burn down charts", value: "seMtd02" },
-            { name: "Code sharing", value: "seMtd03" },
-            { name: "Continuous integration", value: "seMtd04" },
-            { name: "Daily standup", value: "seMtd05" },
-            { name: "Meeting", value: "seMtd06" },
-            { name: "Pair programming", value: "seMtd07" },
-            { name: "Planning poker", value: "seMtd08" },
-            { name: "Requirements prioritisation", value: "seMtd09" },
-            { name: "Restrospectives", value: "seMtd10" },
-            { name: "Storyboards", value: "seMtd11" },
-            { name: "TDD", value: "seMtd12" },
-            { name: "User story mapping", value: "seMtd13" },
-            { name: "Version control", value: "seMtd14" }
+            { name: "BDD", value: "BDD" },
+            { name: "Burn down charts", value: "Burn down charts" },
+            { name: "Code sharing", value: "seCode sharingMtd03" },
+            { name: "Continuous integration", value: "Continuous integration" },
+            { name: "Daily standup", value: "Daily standup" },
+            { name: "Meeting", value: "Meeting" },
+            { name: "Pair programming", value: "Pair programming" },
+            { name: "Planning poker", value: "Planning poker" },
+            { name: "Requirements prioritisation", value: "Requirements prioritisation" },
+            { name: "Restrospectives", value: "Restrospectives" },
+            { name: "Storyboards", value: "Storyboards" },
+            { name: "TDD", value: "TDD" },
+            { name: "User story mapping", value: "User story mapping" },
+            { name: "Version control", value: "Version control" }
           ]
         },
         {
           id: 4,
           name: "SE Methodology",
           option: [
-            { name: "Agile", value: "seMty01" },
-            { name: "Aspect Oriented Development", value: "seMty02" },
-            { name: "Clean Room", value: "seMty03" },
-            { name: "Cloud computing", value: "seMty04" },
-            { name: "Crystal", value: "seMty05" },
-            { name: "Domain Driven Development", value: "seMty06" },
-            { name: "Feature Driven Development", value: "seMty07" },
-            { name: "Formal methods", value: "seMty08" },
-            { name: "Model Driven Development", value: "seMty09" },
-            { name: "Problem Driven Development", value: "seMty10" },
-            { name: "Product Driven Development", value: "seMty11" },
-            { name: "Scrum", value: "seMty12" },
-            { name: "Service Oriented Development", value: "seMty13" },
-            { name: "Spiral Rational Unified Process", value: "seMty14" },
-            { name: "Values Driven Development", value: "seMty15" },
-            { name: "Waterfall", value: "seMty16" },
-            { name: "XP", value: "seMty17" }
+            { name: "Agile", value: "Agile" },
+            { name: "Aspect Oriented Development", value: "Aspect Oriented Development" },
+            { name: "Clean Room", value: "Clean Room" },
+            { name: "Cloud computing", value: "Cloud computing" },
+            { name: "Crystal", value: "Crystal" },
+            { name: "Domain Driven Development", value: "Domain Driven Development" },
+            { name: "Feature Driven Development", value: "Feature Driven Development" },
+            { name: "Formal methods", value: "Formal methods" },
+            { name: "Model Driven Development", value: "Model Driven Development" },
+            { name: "Problem Driven Development", value: "Problem Driven Development" },
+            { name: "Product Driven Development", value: "Product Driven Development" },
+            { name: "Scrum", value: "Scrum" },
+            { name: "Service Oriented Development", value: "Service Oriented Development" },
+            { name: "Spiral Rational Unified Process", value: "Spiral Rational Unified Process" },
+            { name: "Values Driven Development", value: "Values Driven Development" },
+            { name: "Waterfall", value: "Waterfall" },
+            { name: "XP", value: "seXPMty17" }
           ]
         },
         {
@@ -94,11 +94,11 @@ class Home extends Component {
           id: 6,
           name: "Type",
           option: [
-            { name: "Article", value: "typ01" },
-            { name: "Book", value: "typ02" },
-            { name: "Master thesis", value: "typ03" },
-            { name: "Misc", value: "typ04" },
-            { name: "Phd thesis", value: "typ05" }
+            { name: "Article", value: "Article" },
+            { name: "Book", value: "Book" },
+            { name: "Master thesis", value: "Master thesis" },
+            { name: "Misc", value: "Misc" },
+            { name: "Phd thesis", value: "Phd thesis" }
           ]
         }
       ],
@@ -849,7 +849,7 @@ class Home extends Component {
     // Check the conditions of the checkboxes in order to show the selected columns only
     let columns = [];
     if (checkBox.type) {
-      columns = [...columns, { title: "Type", field: "article_type" }];
+      columns = [...columns, { title: "Type", field: "article_publication_type" }];
     }
     if (checkBox.title) {
       columns = [...columns, { title: "Title", field: "article_title" }];

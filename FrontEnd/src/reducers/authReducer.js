@@ -1,4 +1,3 @@
-//'initState' là giá trị khởi tạo ban đầu
 const initState = {
   user: null
 };
