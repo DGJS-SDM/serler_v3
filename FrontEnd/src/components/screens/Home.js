@@ -107,7 +107,7 @@ class Home extends Component {
       conditions: [
         {
           syntax: "AND", // AND - OR - OR NOT
-          field: 1, // ID của field
+          name: "Author", // ID của field
           operator: "Equal to", // Equal to - Not Equal to
           value: "" // field's value
         }
@@ -287,9 +287,9 @@ class Home extends Component {
     const { conditions } = this.state;
     const newCondition = {
       syntax: "AND", // AND - OR - OR NOT
-      field: 1, // ID của field
+      name: "Author",
       operator: "Equal to", // Equal to - Not Equal to
-      value: "" // Giá trị của condition
+      value: ""
     };
     conditions.splice(index + 1, 0, newCondition);
     this.setState({

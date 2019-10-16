@@ -6,7 +6,6 @@ import logo from "../assests/images/Serler-logo.png";
 import icon_menu from "../assests/images/menu.png";
 
 export default class Header extends Component {
-  // Khởi tạo
   componentDidMount() {
     M.AutoInit();
   }
@@ -16,11 +15,11 @@ export default class Header extends Component {
     return (
       <ul id="menu-drop-down" className="dropdown-content">
         <li>
-          <i class="material-icons">cloud_upload</i>
+          <i className="material-icons">cloud_upload</i>
           <a href="#!">Upload Bitex</a>
         </li>
         <li>
-          <i class="material-icons">power_settings_new</i>
+          <i className="material-icons">power_settings_new</i>
           <a href="/">Sign out</a>
         </li>
       </ul>

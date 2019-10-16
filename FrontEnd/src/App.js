@@ -6,7 +6,7 @@ import Home from "./components/screens/Home";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { setDataSuccess } from './actions/home.action'
-import ArticleDetails from "./components/screens/ArticleDetails";
+//import ArticleDetails from "./components/screens/ArticleDetails";
 
 class App extends Component {
   constructor(props){
