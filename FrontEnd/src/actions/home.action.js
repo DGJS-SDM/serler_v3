@@ -20,17 +20,21 @@ export const getDataByCondition = condition => dispatch => {
       .then(d => {
         const data = d.articles
 
-        console.log("Calling condition present!!!" + condition, [0])
-        const newData = data.filter(queryBuilder(condition));
-        console.log(newData);
-        getDataSuccess(dispatch, newData);
+        //console.log("Calling condition present!!!" + condition, [0])
+        //const newData = data.filter(queryBuilder(condition));
+        //console.log(newData);
+        //getDataSuccess(dispatch, newData);
+        getDataSuccess(dispatch, data);
+        
       })
       .catch(function(err) {console.log(err)});
     };
     
 function queryBuilder(condition)
 {
-  console.log("Condition applied " + condition.data)
+  
+
+
   return condition;
 }
 

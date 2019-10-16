@@ -19,8 +19,8 @@ class Home extends Component {
       articles: [],
       type: "keywords", // keywords - filters
       search: "",
-      from: new Date(),
-      to: new Date(),
+      from: new Date().getFullYear()-1,
+      to: new Date().getFullYear(),
       checkBox: {
         analyst: true,
         author: false,
@@ -35,6 +35,10 @@ class Home extends Component {
         year: true
       },
       field: [
+        {
+          id: 0,
+          name: "Select Category"
+        },
         {
           id: 1,
           name: "Author"
@@ -107,7 +111,7 @@ class Home extends Component {
       conditions: [
         {
           syntax: "AND", // AND - OR - OR NOT
-          name: "Author", // ID của field
+          field: 0, // ID của field
           operator: "Equal to", // Equal to - Not Equal to
           value: "" // field's value
         }
@@ -287,7 +291,7 @@ class Home extends Component {
     const { conditions } = this.state;
     const newCondition = {
       syntax: "AND", // AND - OR - OR NOT
-      name: "Author",
+      name: "",
       operator: "Equal to", // Equal to - Not Equal to
       value: ""
     };
