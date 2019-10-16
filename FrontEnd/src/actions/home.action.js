@@ -20,18 +20,31 @@ export const getDataByCondition = condition => dispatch => {
       .then(d => {
         const data = d.articles
 
-        //console.log("Calling condition present!!!" + condition, [0])
         const date_filter = data.filter(dateQuery(condition));
-        const newData = date_filter.filter(queryBuilder(condition.conditions));
-        //const newData = data.filter(queryBuilder(condition.conditions)); TO TEST WITHOUT DATE CONSTRAINT
+        const newData = dynamicSearch(condition.conditions, date_filter); //Replace date_filter with data to remove date constraint
         getDataSuccess(dispatch, newData);        
       })
       .catch(function(err) {console.log(err)});
     };
-    
-function queryBuilder(conditions)
+
+    //Takes in the condition array, and a list of articles
+function dynamicSearch(conditions, currList)
 {
-  var myCond = conditions[0];
+  var i = 0;
+  while(i<conditions.length) //while there are conditions to fulfil
+  {
+    currList = currList.filter(queryBuilder(conditions, i)); //overwrite the list with the filtered list based on the condition applied
+    i++; //increment so next iteration, the next condition is applied, and so loop can eventually break.
+  }
+
+  return currList;
+}
+    
+// CURRENT BUG -- When syntax and operator are both negative, it does not apply the double negative yet. 
+// Need to separate into two different if statements for the double negative to apply. Unsure if required so havent done. .
+function queryBuilder(conditions, i)
+{
+  var myCond = conditions[i]; // The current condition thats being applied.
   var authQ;
   var DOIQ;
   var seMethQ;
@@ -40,33 +53,35 @@ function queryBuilder(conditions)
   var typeQ;
 
   return function(x)
-  {
-    if(myCond.syntax == "AND")
-    {
-      switch(myCond.field) {
-        case 1: //author
-          authQ = StringCompare(x.article_authors, myCond.value);
-          return authQ;
-        case 2: //doi
-          DOIQ = (x.article_doi == myCond.value);
-          return DOIQ;
-        case 3:
-          seMethQ = StringCompare(x.article_seMethod, myCond.value);
-          return seMethQ;
-          //break;
-        case 4:
-          seMethodQ = StringCompare(x.article_seMethodology, myCond.value);
-          return seMethodQ;
-        case 5:
-          titQ = StringCompare(x.article_title, myCond.value);
-          return titQ;
-        case 6:
-          typeQ = StringCompare(x.article_publication_type, myCond.value);
-          return typeQ;
-        default:
-          console.log("Nothing is selected!!");
-          return true;
-      } 
+  {//Check the field that has been selected
+    switch(myCond.field) {
+      case 1: //author
+        authQ = StringCompare(x.article_authors, myCond.value); //HELPER FUNCTION SEE BELOW
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { authQ = !authQ }; 
+        return authQ
+      case 2: //doi
+        DOIQ = (x.article_doi === parseInt(myCond.value));
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { DOIQ = !DOIQ }; // if NOT, negate the result. 
+        return DOIQ;
+      case 3: //SE method
+        seMethQ = StringCompare(x.article_seMethod, myCond.value);
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { seMethQ = !seMethQ };
+        return seMethQ;
+      case 4: //SE methodology
+        seMethodQ = StringCompare(x.article_seMethodology, myCond.value);
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { seMethodQ = !seMethodQ };
+        return seMethodQ;
+      case 5: //Title
+        titQ = StringCompare(x.article_title, myCond.value);
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { titQ = !titQ };
+        return titQ;
+      case 6: //Type
+        typeQ = StringCompare(x.article_publication_type, myCond.value);
+        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { typeQ = !typeQ };
+        return typeQ;
+      default:
+        console.log("Nothing is selected!!"); // If nothing is selected, return true for all.
+        return true;
     }
   }
 }
@@ -93,6 +108,7 @@ function dateQuery(condition)
   };
 }
 
+//helper function to compare string values by converting both to lowercase and seeing if it includes. 
 function StringCompare(myField, value)
 {
   if(myField != null)

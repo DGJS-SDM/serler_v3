@@ -550,9 +550,8 @@ class Home extends Component {
         value={condition.syntax}
       >
         <option value="AND">AND</option>
-        <option value="AND NOT">AND NOT</option>
         <option value="OR">OR</option>
-        <option value="OR NOT">OR NOT</option>
+        <option value="NOT">NOT</option>
       </select>
     );
   }
