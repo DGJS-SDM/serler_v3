@@ -18,7 +18,7 @@
     "url": "https://github.com/DGJS-SDM/serler_v2/issues"
   },
   "homepage": "https://github.com/DGJS-SDM/serler_v2#readme",
-  "dependencies": {
+  "dependencies": {    
     "concurrently": "^4.1.2",
     "react-scripts": "^3.1.1"
   },

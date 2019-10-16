@@ -16,7 +16,7 @@ export default class Header extends Component {
       <ul id="menu-drop-down" className="dropdown-content">
         <li>
           <i className="material-icons">cloud_upload</i>
-          <a href="#!">Upload Bitex</a>
+          <a href="/import">Upload Bitex</a>
         </li>
         <li>
           <i className="material-icons">power_settings_new</i>
@@ -31,11 +31,13 @@ export default class Header extends Component {
       <div style={{ backgroundColor: "#E8EEFD", width: "100%", height: 80 }}>
         <div className="row">
           <div className="col s4">
-            <img
-              src={logo}
-              alt="Logo"
-              style={{ height: 70, width: 70, marginTop: 5, float: "left" }}
-            />
+            <a href="/home">
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ height: 70, width: 70, marginTop: 5, float: "left" }}
+              />
+            </a>
           </div>
           <div className="col s4">
             <div

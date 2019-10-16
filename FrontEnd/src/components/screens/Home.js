@@ -19,7 +19,7 @@ class Home extends Component {
       articles: [],
       type: "keywords", // keywords - filters
       search: "",
-      from: new Date().getFullYear()-1,
+      from: new Date().getFullYear() - 1,
       to: new Date().getFullYear(),
       checkBox: {
         analyst: true,
@@ -59,7 +59,10 @@ class Home extends Component {
             { name: "Meeting", value: "Meeting" },
             { name: "Pair programming", value: "Pair programming" },
             { name: "Planning poker", value: "Planning poker" },
-            { name: "Requirements prioritisation", value: "Requirements prioritisation" },
+            {
+              name: "Requirements prioritisation",
+              value: "Requirements prioritisation"
+            },
             { name: "Restrospectives", value: "Restrospectives" },
             { name: "Storyboards", value: "Storyboards" },
             { name: "TDD", value: "TDD" },
@@ -72,20 +75,47 @@ class Home extends Component {
           name: "SE Methodology",
           option: [
             { name: "Agile", value: "Agile" },
-            { name: "Aspect Oriented Development", value: "Aspect Oriented Development" },
+            {
+              name: "Aspect Oriented Development",
+              value: "Aspect Oriented Development"
+            },
             { name: "Clean Room", value: "Clean Room" },
             { name: "Cloud computing", value: "Cloud computing" },
             { name: "Crystal", value: "Crystal" },
-            { name: "Domain Driven Development", value: "Domain Driven Development" },
-            { name: "Feature Driven Development", value: "Feature Driven Development" },
+            {
+              name: "Domain Driven Development",
+              value: "Domain Driven Development"
+            },
+            {
+              name: "Feature Driven Development",
+              value: "Feature Driven Development"
+            },
             { name: "Formal methods", value: "Formal methods" },
-            { name: "Model Driven Development", value: "Model Driven Development" },
-            { name: "Problem Driven Development", value: "Problem Driven Development" },
-            { name: "Product Driven Development", value: "Product Driven Development" },
+            {
+              name: "Model Driven Development",
+              value: "Model Driven Development"
+            },
+            {
+              name: "Problem Driven Development",
+              value: "Problem Driven Development"
+            },
+            {
+              name: "Product Driven Development",
+              value: "Product Driven Development"
+            },
             { name: "Scrum", value: "Scrum" },
-            { name: "Service Oriented Development", value: "Service Oriented Development" },
-            { name: "Spiral Rational Unified Process", value: "Spiral Rational Unified Process" },
-            { name: "Values Driven Development", value: "Values Driven Development" },
+            {
+              name: "Service Oriented Development",
+              value: "Service Oriented Development"
+            },
+            {
+              name: "Spiral Rational Unified Process",
+              value: "Spiral Rational Unified Process"
+            },
+            {
+              name: "Values Driven Development",
+              value: "Values Driven Development"
+            },
             { name: "Waterfall", value: "Waterfall" },
             { name: "XP", value: "seXPMty17" }
           ]
@@ -104,7 +134,7 @@ class Home extends Component {
             { name: "Misc", value: "Misc" },
             { name: "Phd thesis", value: "Phd thesis" },
             { name: "Conference", value: "Conference" },
-            { name: "Journal" , value: "Journal" }
+            { name: "Journal", value: "Journal" }
           ]
         }
       ],
@@ -257,7 +287,7 @@ class Home extends Component {
   };
 
   // Set the value of Text Input for Search by Keywords
-  onTextInputSearchChange = event => {
+  onTextInputSearchChange = (event) => {
     this.setState({
       search: event.target.value
     });
@@ -273,14 +303,14 @@ class Home extends Component {
   };
 
   // Change value on 'from year'
-  onFromChange = date => {
+  onFromChange = (date) => {
     this.setState({
       from: date
     });
   };
 
   // Change value on 'to year'
-  onToChange = date => {
+  onToChange = (date) => {
     this.setState({
       to: date
     });
@@ -289,7 +319,7 @@ class Home extends Component {
 
   // -------------------------- Set values for Filter Pannel --------------------------
   // Add one more filter row
-  onAddMoreCondition = index => {
+  onAddMoreCondition = (index) => {
     const { conditions } = this.state;
     const newCondition = {
       syntax: "AND", // AND - OR - OR NOT
@@ -304,7 +334,7 @@ class Home extends Component {
   };
 
   // Remove the filter row
-  onRemoveCondition = index => {
+  onRemoveCondition = (index) => {
     const { conditions } = this.state;
     const newConditions = [...conditions];
     newConditions.splice(index, 1);
@@ -326,7 +356,7 @@ class Home extends Component {
   onDropDownFieldChange = (event, index) => {
     const { conditions, field } = this.state;
     const fieldId = parseInt(event.target.value);
-    const selectdField = field && field.find(f => f.id === fieldId);
+    const selectdField = field && field.find((f) => f.id === fieldId);
 
     // If the selected field got a fixed value list, the first value would be selected as default
     const value =
@@ -387,7 +417,7 @@ class Home extends Component {
             className="with-gap"
             type="radio"
             checked={type === "keywords"}
-            onChange={e => {
+            onChange={(e) => {
               this.onSelectBoxSearch("keywords", e);
             }}
           />
@@ -399,7 +429,7 @@ class Home extends Component {
             className="with-gap"
             type="radio"
             checked={type === "filters"}
-            onChange={e => {
+            onChange={(e) => {
               this.onSelectBoxSearch("filters", e);
             }}
           />
@@ -420,7 +450,7 @@ class Home extends Component {
               type="text"
               placeholder="Enter keyword to search"
               value={search}
-              onChange={e => {
+              onChange={(e) => {
                 this.onTextInputSearchChange(e);
               }}
             />
@@ -471,7 +501,7 @@ class Home extends Component {
             <div className="col s2" style={{ textAlign: "left" }}>
               <YearPicker
                 selected={from}
-                onChange={date => this.onFromChange(date)}
+                onChange={(date) => this.onFromChange(date)}
                 dateFormat="yyyy"
               />
             </div>
@@ -481,7 +511,7 @@ class Home extends Component {
             <div className="col s2">
               <YearPicker
                 selected={to}
-                onChange={date => this.onToChange(date)}
+                onChange={(date) => this.onToChange(date)}
                 dateFormat="yyyy"
               />
             </div>
@@ -544,7 +574,7 @@ class Home extends Component {
     return (
       <select
         className="browser-default"
-        onChange={e => {
+        onChange={(e) => {
           this.onDropDownSyntaxChange(e, index);
         }}
         value={condition.syntax}
@@ -570,7 +600,7 @@ class Home extends Component {
       return (
         <select
           className="browser-default"
-          onChange={e => {
+          onChange={(e) => {
             this.onDropDownFieldChange(e, index);
           }}
           value={condition.field}
@@ -586,7 +616,7 @@ class Home extends Component {
     return (
       <select
         className="browser-default"
-        onChange={e => {
+        onChange={(e) => {
           this.onDropDownOperatorChange(e, index);
         }}
         value={condition.operator}
@@ -599,7 +629,7 @@ class Home extends Component {
 
   renderSingleConditionLastField(condition, index) {
     const { field } = this.state;
-    const selectedField = field.find(f => f.id === condition.field);
+    const selectedField = field.find((f) => f.id === condition.field);
     if (selectedField && selectedField.option) {
       // If the selected field got fixed value list, then show up.
       const fieldOptions = selectedField.option.map((f, i) => {
@@ -612,7 +642,7 @@ class Home extends Component {
       return (
         <select
           className="browser-default"
-          onChange={e => {
+          onChange={(e) => {
             this.onDropDownValueChange(e, index);
           }}
           value={condition.value}
@@ -627,7 +657,7 @@ class Home extends Component {
           type="text"
           placeholder="Input value"
           value={condition.value}
-          onChange={e => {
+          onChange={(e) => {
             this.onInputValueChange(e, index);
           }}
         />
@@ -855,7 +885,10 @@ class Home extends Component {
     // Check the conditions of the checkboxes in order to show the selected columns only
     let columns = [];
     if (checkBox.type) {
-      columns = [...columns, { title: "Type", field: "article_publication_type" }];
+      columns = [
+        ...columns,
+        { title: "Type", field: "article_publication_type" }
+      ];
     }
     if (checkBox.title) {
       columns = [...columns, { title: "Title", field: "article_title" }];
@@ -876,7 +909,10 @@ class Home extends Component {
       columns = [...columns, { title: "DOI", field: "article_doi" }];
     }
     if (checkBox.participants) {
-      columns = [...columns, { title: "Participants", field: "article_participants" }];
+      columns = [
+        ...columns,
+        { title: "Participants", field: "article_participants" }
+      ];
     }
     if (checkBox.researchQuestion) {
       columns = [
@@ -922,8 +958,10 @@ class Home extends Component {
             data={data}
             style={{ boxShadow: "none", borderBottom: 0 }}
             // When click on a row, get details of selected record then push the details to the screen 'article-details
-            onRowClick={(e, detail) => {
-              this.props.history.push("/article-details", { detail: detail });
+            onRowClick={(e, rowData) => {
+              // this.props.history.push("/detail/", { rowData: rowData.id });
+              console.log("data:", rowData);
+              this.props.history.push("/detail/" + rowData._id);
             }}
           />
         </div>
@@ -949,7 +987,7 @@ class Home extends Component {
 // -------------------------- END RENDER BOTTOM SECTIONS --------------------------
 
 // Get the relevant fields in that 'state' of redux then pass those values to 'props' via reducer
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     data: state.homeReducer.data
   };
