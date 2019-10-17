@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
-import YearPicker from "react-year-picker";
-import "react-datepicker/dist/react-datepicker.css";
 import M from "materialize-css";
 import "./Home.css";
 import Header from "../commons/Header";
@@ -14,13 +12,22 @@ import { getDataByCondition } from "../../actions/home.action";
 class Home extends Component {
   constructor(props) {
     super(props);
-    //Declare and set default values for state
+    // John: Declare and set default values for state
     this.state = {
       articles: [],
       type: "keywords", // keywords - filters
       search: "",
+
+      // John: The below 4 variables are applied for year range
+      min: 1960,
+      // John: the 'max' value of year is the current
+      max: new Date().getFullYear(),
+      // John: the intial 'from' value is the current minus 1
       from: new Date().getFullYear() - 1,
+      // John: the intial 'to' value is the current year
       to: new Date().getFullYear(),
+
+      // John: Declare and assign initial values to the checkboxes that will appear on the popup for selecting columns
       checkBox: {
         analyst: true,
         author: false,
@@ -34,6 +41,8 @@ class Home extends Component {
         type: true,
         year: true
       },
+
+      // John: Declare the fields and their fixed values (if any) that will be used on the search filter
       field: [
         {
           id: 0,
@@ -53,7 +62,7 @@ class Home extends Component {
           option: [
             { name: "BDD", value: "BDD" },
             { name: "Burn down charts", value: "Burn down charts" },
-            { name: "Code sharing", value: "seCode sharingMtd03" },
+            { name: "Code sharing", value: "Code sharing" },
             { name: "Continuous integration", value: "Continuous integration" },
             { name: "Daily standup", value: "Daily standup" },
             { name: "Meeting", value: "Meeting" },
@@ -117,7 +126,7 @@ class Home extends Component {
               value: "Values Driven Development"
             },
             { name: "Waterfall", value: "Waterfall" },
-            { name: "XP", value: "seXPMty17" }
+            { name: "XP", value: "XP" }
           ]
         },
         {
@@ -139,11 +148,11 @@ class Home extends Component {
         }
       ],
 
-      // Each condition row contains 4 elements: syntax, field, field value
+      // John: Each condition row contains 4 elements: syntax, field, operator and field value
       conditions: [
         {
-          syntax: "AND", // AND - OR - OR NOT
-          field: 0, // ID của field
+          syntax: "AND", // AND - OR - NOT
+          field: 0, // field ID
           operator: "Equal to", // Equal to - Not Equal to
           value: "" // field's value
         }
@@ -165,7 +174,7 @@ class Home extends Component {
 
   // -------------------------- FUNCTIONS --------------------------
 
-  // Set the value of Analyst checkbox
+  // John: Set the value of Analyst checkbox
   toggleAnalystCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -176,7 +185,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Author checkbox
+  // John: Set the value of Author checkbox
   toggleAuthorCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -187,7 +196,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of DOI checkbox
+  // John: Set the value of DOI checkbox
   toggleDoiCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -198,7 +207,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Participants checkbox
+  // John: Set the value of Participants checkbox
   toggleParticipantsCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -209,7 +218,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Research Question checkbox
+  // John: Set the value of Research Question checkbox
   toggleResearchQuestionCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -220,7 +229,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Research Result checkbox
+  // John: Set the value of Research Result checkbox
   toggleResearchResultCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -231,7 +240,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of SE Method checkbox
+  // John: Set the value of SE Method checkbox
   toggleSeMethodCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -242,7 +251,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of SE Methodology checkbox
+  // John: Set the value of SE Methodology checkbox
   toggleSeMethodologyCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -253,7 +262,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Title checkbox
+  // John: Set the value of Title checkbox
   toggleTitleCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -264,7 +273,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Type checkbox
+  // John: Set the value of Type checkbox
   toggleTypeCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -275,7 +284,7 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Year checkbox
+  // John: Set the value of Year checkbox
   toggleYearCheckBox = () => {
     const { checkBox } = this.state;
     this.setState({
@@ -286,8 +295,8 @@ class Home extends Component {
     });
   };
 
-  // Set the value of Text Input for Search by Keywords
-  onTextInputSearchChange = (event) => {
+  // John: Set the value of Text Input for Search by Keywords
+  onTextInputSearchChange = event => {
     this.setState({
       search: event.target.value
     });
@@ -303,26 +312,44 @@ class Home extends Component {
   };
 
   // Change value on 'from year'
-  onFromChange = (date) => {
-    this.setState({
-      from: date
-    });
+  onFromChange = event => {
+    const { to } = this.state;
+    const date = event.target.value;
+    // John: This condition is about to calculate the range of 'from' year ends by 'to' year minus 1
+    if (date >= to) {
+      this.setState({
+        from: parseInt(to - 1)
+      });
+    } else {
+      this.setState({
+        from: parseInt(date)
+      });
+    }
   };
 
   // Change value on 'to year'
-  onToChange = (date) => {
-    this.setState({
-      to: date
-    });
+  onToChange = event => {
+    const { from } = this.state;
+    const date = event.target.value;
+    // John: This condition is about to calculate the range of 'to' year starts from 'from' year plus 1
+    if (date <= from) {
+      this.setState({
+        to: parseInt(from + 1)
+      });
+    } else {
+      this.setState({
+        to: parseInt(date)
+      });
+    }
   };
   // -------------------------- END Select Year Range --------------------------
 
-  // -------------------------- Set values for Filter Pannel --------------------------
-  // Add one more filter row
-  onAddMoreCondition = (index) => {
+  // -------------------------- Set values for Filter Panel --------------------------
+  // John: Add one more filter row
+  onAddMoreCondition = index => {
     const { conditions } = this.state;
     const newCondition = {
-      syntax: "AND", // AND - OR - OR NOT
+      syntax: "AND", // AND - OR - NOT
       name: "",
       operator: "Equal to", // Equal to - Not Equal to
       value: ""
@@ -333,8 +360,8 @@ class Home extends Component {
     });
   };
 
-  // Remove the filter row
-  onRemoveCondition = (index) => {
+  // John: Remove the filter row
+  onRemoveCondition = index => {
     const { conditions } = this.state;
     const newConditions = [...conditions];
     newConditions.splice(index, 1);
@@ -343,7 +370,7 @@ class Home extends Component {
     });
   };
 
-  // Change the value of syntax dropdown on a specified index row
+  // John: Change the value of syntax dropdown on a specified index row
   onDropDownSyntaxChange = (event, index) => {
     const { conditions } = this.state;
     conditions[index].syntax = event.target.value;
@@ -352,13 +379,13 @@ class Home extends Component {
     });
   };
 
-  // Change the value of field dropdown on a specified index row
+  // John: Change the value of field dropdown on a specified index row
   onDropDownFieldChange = (event, index) => {
     const { conditions, field } = this.state;
     const fieldId = parseInt(event.target.value);
-    const selectdField = field && field.find((f) => f.id === fieldId);
+    const selectdField = field && field.find(f => f.id === fieldId);
 
-    // If the selected field got a fixed value list, the first value would be selected as default
+    // John: If the selected field got a fixed value list, the first value would be selected as default
     const value =
       selectdField && selectdField.option ? selectdField.option[0].value : "";
 
@@ -369,7 +396,7 @@ class Home extends Component {
     });
   };
 
-  // Change the value of operator dropdown on a specified index row
+  // John: Change the value of Operator dropdown on a specified index row
   onDropDownOperatorChange = (event, index) => {
     const { conditions } = this.state;
     conditions[index].operator = event.target.value;
@@ -378,7 +405,7 @@ class Home extends Component {
     });
   };
 
-  // Change the value of Dropdown Value on a specified index row
+  // John: Change the value of Dropdown Value on a specified index row
   onDropDownValueChange = (event, index) => {
     const { conditions } = this.state;
     conditions[index].value = event.target.value;
@@ -387,7 +414,7 @@ class Home extends Component {
     });
   };
 
-  // Change the value of Input Value on a specified index row
+  // John: Change the value of Input Value on a specified index row
   onInputValueChange = (event, index) => {
     const { conditions } = this.state;
     conditions[index].value = event.target.value;
@@ -395,7 +422,7 @@ class Home extends Component {
       conditions
     });
   };
-  //-------------------------- END Set values for Filter Pannel --------------------------
+  //-------------------------- END Set values for Filter Panel --------------------------
 
   // -------------------------- FUNCTION Press Button Search --------------------------
   onPressButtonSearch = () => {
@@ -406,7 +433,7 @@ class Home extends Component {
   // -------------------------- END FUNCTION Press Button Search -----------------------
 
   // -------------------------- RENDER TOP SECTIONS --------------------------
-  // Panel to select either "Search by Keywords" or "Search by Filters"
+  // John: This row is about to select either "Search by Keywords" or "Search by Filters"
   renderSearchSelectBox() {
     const { type } = this.state;
     return (
@@ -417,7 +444,7 @@ class Home extends Component {
             className="with-gap"
             type="radio"
             checked={type === "keywords"}
-            onChange={(e) => {
+            onChange={e => {
               this.onSelectBoxSearch("keywords", e);
             }}
           />
@@ -429,7 +456,7 @@ class Home extends Component {
             className="with-gap"
             type="radio"
             checked={type === "filters"}
-            onChange={(e) => {
+            onChange={e => {
               this.onSelectBoxSearch("filters", e);
             }}
           />
@@ -439,7 +466,7 @@ class Home extends Component {
     );
   }
 
-  // Panel of "Search by Keywords"
+  // John: Panel of "Search by Keywords"
   renderSearchSection() {
     const { type, search } = this.state;
     if (type === "keywords") {
@@ -450,7 +477,7 @@ class Home extends Component {
               type="text"
               placeholder="Enter keyword to search"
               value={search}
-              onChange={(e) => {
+              onChange={e => {
                 this.onTextInputSearchChange(e);
               }}
             />
@@ -471,7 +498,7 @@ class Home extends Component {
     return null;
   }
 
-  // Panel of "Search by Filters"
+  // John: Panel of "Search by Filters"
   renderFilterSection() {
     const { type } = this.state;
     if (type === "filters") {
@@ -485,36 +512,26 @@ class Home extends Component {
     return null;
   }
 
-  // Row select Year Range and Search Button
+  // John: this row shows Year Range and Search Button
   renderFromToSection() {
-    const { from, to } = this.state;
     return (
       <div className="row" style={{ marginTop: 10 }}>
-        <div className="col s10">
+        <div className="col s2" />
+
+        <div className="col s8">
           <div className="row">
-            <div className="col s2">
+            <div className="col s4">
               <p style={{ textAlign: "left" }}>Year range:</p>
             </div>
             <div className="col s1">
-              <p style={{ textAlign: "left" }}>From: </p>
+              <p style={{ textAlign: "right" }}>From </p>
             </div>
-            <div className="col s2" style={{ textAlign: "left" }}>
-              <YearPicker
-                selected={from}
-                onChange={(date) => this.onFromChange(date)}
-                dateFormat="yyyy"
-              />
+            <div className="col s3">{this.renderFromDropDown()}</div>
+
+            <div className="col s1">
+              <p style={{ textAlign: "right" }}>To </p>
             </div>
-            <div className="col s2">
-              <p style={{ textAlign: "right" }}>To: </p>
-            </div>
-            <div className="col s2">
-              <YearPicker
-                selected={to}
-                onChange={(date) => this.onToChange(date)}
-                dateFormat="yyyy"
-              />
-            </div>
+            <div className="col s3">{this.renderToDropDown()}</div>
           </div>
         </div>
 
@@ -532,6 +549,57 @@ class Home extends Component {
     );
   }
 
+  renderFromDropDown() {
+    const { from, to, min } = this.state;
+    const options = [];
+    // John: the array values of 'from' year will start from 'min' to the 'to' year minus 1
+    for (let i = 0; i < to - min; i++) {
+      const year = min + i;
+      options.push(
+        <option key={i} value={year}>
+          {year}
+        </option>
+      );
+    }
+    return (
+      <select
+        className="browser-default"
+        value={from}
+        onChange={e => {
+          this.onFromChange(e);
+        }}
+      >
+        {options}
+      </select>
+    );
+  }
+
+  renderToDropDown() {
+    const { from, to, max } = this.state;
+    const options = [];
+    // John: the array values of 'to' year will start from 'from' year plus 1 to the 'max'
+    for (let i = 1; i <= max - from; i++) {
+      const year = from + i;
+      options.push(
+        <option key={i} value={year}>
+          {year}
+        </option>
+      );
+    }
+    return (
+      <select
+        className="browser-default"
+        value={to}
+        onChange={e => {
+          this.onToChange(e);
+        }}
+      >
+        {options}
+      </select>
+    );
+  }
+
+  // ------------------ Render Condition Section -----------------
   renderConditionSection() {
     const { conditions } = this.state;
     if (conditions) {
@@ -542,6 +610,7 @@ class Home extends Component {
     return null;
   }
 
+  // ---------------- Render one signle condition row -----------------
   renderSingleCondition(condition, index) {
     return (
       <div className="row condition-row" key={index}>
@@ -566,15 +635,16 @@ class Home extends Component {
     );
   }
 
+  // John: FirstField is the syntax field (AND/OR/NOT)
   renderSingleConditionFirstField(condition, index) {
     if (index === 0) {
-      // Check if this is the first condition row
+      // John: Check if this is the first condition row, then not appear
       return null;
     }
     return (
       <select
         className="browser-default"
-        onChange={(e) => {
+        onChange={e => {
           this.onDropDownSyntaxChange(e, index);
         }}
         value={condition.syntax}
@@ -586,6 +656,7 @@ class Home extends Component {
     );
   }
 
+  // John: SecondField is the Category field
   renderSingleConditionSecondField(condition, index) {
     const { field } = this.state;
     if (field) {
@@ -599,7 +670,7 @@ class Home extends Component {
       return (
         <select
           className="browser-default"
-          onChange={(e) => {
+          onChange={e => {
             this.onDropDownFieldChange(e, index);
           }}
           value={condition.field}
@@ -611,11 +682,12 @@ class Home extends Component {
     return null;
   }
 
+  // John: ThirdField is the operation field (Equal to/ Not equal to)
   renderSingleConditionThirdField(condition, index) {
     return (
       <select
         className="browser-default"
-        onChange={(e) => {
+        onChange={e => {
           this.onDropDownOperatorChange(e, index);
         }}
         value={condition.operator}
@@ -626,11 +698,12 @@ class Home extends Component {
     );
   }
 
+  // John: LastField is the value(s) of the SecondField
   renderSingleConditionLastField(condition, index) {
     const { field } = this.state;
-    const selectedField = field.find((f) => f.id === condition.field);
+    const selectedField = field.find(f => f.id === condition.field);
     if (selectedField && selectedField.option) {
-      // If the selected field got fixed value list, then show up.
+      // John: If the selected field got fixed value list, then show them up.
       const fieldOptions = selectedField.option.map((f, i) => {
         return (
           <option key={i} value={f.value}>
@@ -641,7 +714,7 @@ class Home extends Component {
       return (
         <select
           className="browser-default"
-          onChange={(e) => {
+          onChange={e => {
             this.onDropDownValueChange(e, index);
           }}
           value={condition.value}
@@ -650,13 +723,13 @@ class Home extends Component {
         </select>
       );
     } else if (selectedField && !selectedField.option) {
-      // Otherwise, show up the textbox to input value
+      // John: Otherwise, show up the textbox to type in value
       return (
         <input
           type="text"
           placeholder="Input value"
           value={condition.value}
-          onChange={(e) => {
+          onChange={e => {
             this.onInputValueChange(e, index);
           }}
         />
@@ -665,7 +738,9 @@ class Home extends Component {
     return null;
   }
 
+  // John: ConditionButton includes 'AddMoreCondition' button and 'RemoveCondition' button
   renderSingleConditionButton(index) {
+    // John: On the first condition row, just have the 'add' button only to add more condition
     if (index === 0) {
       return (
         <div className="row">
@@ -685,6 +760,7 @@ class Home extends Component {
         </div>
       );
     }
+    // John: From the second row will have both 'add' and 'remove' button to either add more or remove condition
     return (
       <div className="row">
         <div className="col">
@@ -715,7 +791,9 @@ class Home extends Component {
         </div>
       </div>
     );
+    // ---------------- END Render one signle condition row -----------------
   }
+  // -------------- END Render Condition Section ---------------
 
   renderTopSection() {
     return (
@@ -737,7 +815,7 @@ class Home extends Component {
   // -------------------------- END RENDER TOP SECTIONS --------------------------
 
   // -------------------------- RENDER BOTTOM SECTIONS --------------------------
-  // Declare popup that contain the list of checkboxes to edit the visibility of columns
+  // John: Declare popup that contains the list of checkboxes to edit the visibility of columns
   renderModalCheckBox() {
     const { checkBox } = this.state;
     return (
@@ -877,11 +955,11 @@ class Home extends Component {
     );
   }
 
-  // Render the Search Result Table
+  // John: Render the Search Result Table
   renderBottomSection() {
     const { checkBox } = this.state;
     const { data } = this.props;
-    // Check the conditions of the checkboxes in order to show the selected columns only
+    // John: Check the conditions of the checkboxes in order to show the selected columns only
     let columns = [];
     if (checkBox.type) {
       columns = [
@@ -937,7 +1015,7 @@ class Home extends Component {
       showTitle: false
     };
     return (
-      //List of checkboxes to edit the visibility of columns & result table
+      // John: List of checkboxes to edit the visibility of columns & result table
       <div
         className="row"
         style={{
@@ -956,10 +1034,8 @@ class Home extends Component {
             columns={columns}
             data={data}
             style={{ boxShadow: "none", borderBottom: 0 }}
-            // When click on a row, get details of selected record then push the details to the screen 'article-details
+            // John: When click on a row, get details of selected record then push the details to the screen 'article-details
             onRowClick={(e, rowData) => {
-              // this.props.history.push("/detail/", { rowData: rowData.id });
-              console.log("data:", rowData);
               this.props.history.push("/detail/" + rowData._id);
             }}
           />
@@ -968,25 +1044,25 @@ class Home extends Component {
     );
   }
 
-  // This section combines all components to show up on this page: header, body, footer
+  // John: This section combines all components to show up on this page: header, body, footer
   render() {
     return (
       <div style={{ minHeight: "100vh" }}>
-        <Header title="Home" />
         <div className="container">
+          <Header title="Home" />
           {this.renderTopSection()}
           {this.renderBottomSection()}
           {this.renderModalCheckBox()}
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
 }
 // -------------------------- END RENDER BOTTOM SECTIONS --------------------------
 
-// Get the relevant fields in that 'state' of redux then pass those values to 'props' via reducer
-const mapStateToProps = (state) => {
+// John: Get the relevant fields in that 'state' of redux then pass those values to 'props' via reducer
+const mapStateToProps = state => {
   return {
     data: state.homeReducer.data
   };
