@@ -9,7 +9,7 @@ class ImportBibtex extends React.Component {
     super(props);
     this.readBibFile = this.readBibFile.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    //david: declare the state of the article field
+    // declare the state of the article field
     this.state = {
       title: "",
       authors: "",
@@ -24,7 +24,7 @@ class ImportBibtex extends React.Component {
       isActive: false
     };
   }
-  //david: read the bib file
+  // read the bib file
   readBibFile(e) {
     let _input = null;
     let files = e.target.files;
@@ -32,12 +32,12 @@ class ImportBibtex extends React.Component {
 
     reader.readAsText(files[0]);
 
-    reader.onload = (e) => {
+    reader.onload = e => {
       _input = e.target.result;
-      //david: part the conent from the bibtex file to json format
+      // part the conent from the bibtex file to json format
       var sample = BibtexParse.toJSON(_input);
       var tags = sample[0].entryTags;
-      //david: get all the elements from the json format and set for the states
+      // get all the elements from the json format and set for the states
       this.setState({ title: tags.title });
       this.setState({ authors: tags.author });
       this.setState({ publication_type: tags.journal });
@@ -47,7 +47,7 @@ class ImportBibtex extends React.Component {
       this.setState({ isActive: true });
     };
   }
-  //david: handle the onSubmit event
+  // handle the onSubmit event
   onSubmit(e) {
     if (this.state.isActive == false) {
       var preview = document.getElementById("show-text");
@@ -65,7 +65,7 @@ class ImportBibtex extends React.Component {
         article_status: "on_hold",
         article_rating: "0"
       };
-      //david: call the api to add article to database
+      // call the api to add article to database
       axios.post("http://localhost:3001/articles/add", obj);
       this.setState({
         title: "",
@@ -78,7 +78,7 @@ class ImportBibtex extends React.Component {
         status: "",
         rating: ""
       });
-      //david: inform user the article is added
+      // inform user the article is added
       var preview = document.getElementById("show-ms");
       preview.innerHTML = "<span>Article has been added</span>";
     }
@@ -92,10 +92,10 @@ class ImportBibtex extends React.Component {
           className="btn"
           type="file"
           accept=".bib"
-          onChange={(e) => this.readBibFile(e)}
+          onChange={e => this.readBibFile(e)}
         />
         <div id="show-text"> Choose Bibtex file to import</div>
-        {/* David: Load the value from bibtex file for user to preview */}
+        {/*  Load the value from bibtex file for user to preview */}
         <h4>Preview</h4>
         <table>
           <tr>

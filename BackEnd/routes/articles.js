@@ -8,7 +8,7 @@ router.route("/").get((req, res) => {
   });
 });
 
-//David: set route to add data to database
+// set route to add data to database
 router.route("/add").post((req, res) => {
   let addArticle = new article(req.body);
   addArticle
@@ -16,12 +16,12 @@ router.route("/add").post((req, res) => {
     .then(() => {
       res.status(200).json({ addArticle: "article added" });
     })
-    .catch((err) => {
+    .catch(err => {
       res.status(400).send("unable to save to database");
     });
 });
 
-//David: set route to get data by id from database
+// set route to get data by id from database
 router.route("/detail/:id").get(function(req, res) {
   let id = req.params.id;
   article.findById(id, function(err, article) {

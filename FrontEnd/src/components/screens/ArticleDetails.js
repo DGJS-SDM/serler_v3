@@ -7,7 +7,7 @@ class ArticleDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    //david: declare the state of the article field
+    // declare the state of the article field
     this.state = {
       title: "",
       authors: "",
@@ -24,14 +24,14 @@ class ArticleDetails extends React.Component {
     };
   }
 
-  //david: call API to get article details by id
+  // call API to get article details by id
   componentDidMount() {
     axios
       .get(
         "http://localhost:3001/articles/detail/" + this.props.match.params.id
       )
-      .then((response) => {
-        //david: get value of all the fields from database and set for the state
+      .then(response => {
+        // get value of all the fields from database and set for the state
         this.setState({
           title: response.data.article_title,
           authors: response.data.article_authors,
@@ -52,7 +52,7 @@ class ArticleDetails extends React.Component {
         console.log(error);
       });
   }
-  //david: display article details by assign all the states to the htlm tag
+  // display article details by assign all the states to the htlm tag
   render() {
     return (
       <div className="container">
