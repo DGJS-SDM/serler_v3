@@ -1,23 +1,23 @@
 {
-  "name": "my-app",
+  "name": "SERLER",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"cd BackEnd && node server.js\" \"cd FrontEnd && npm start\"",
-    "test": "mocha"
+    "test": "mocha frontend/home.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DGJS-SDM/serler_v2.git"
+    "url": "git+https://github.com/DGJS-SDM/serler_v3.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DGJS-SDM/serler_v2/issues"
+    "url": "https://github.com/DGJS-SDM/serler_v3/issues"
   },
-  "homepage": "https://github.com/DGJS-SDM/serler_v2#readme",
+  "homepage": "https://github.com/DGJS-SDM/serler_v3#readme",
   "dependencies": {
     "concurrently": "^4.1.2",
     "react-scripts": "^3.1.1"
