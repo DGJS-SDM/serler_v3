@@ -5,15 +5,16 @@ import Login from "./components/screens/Login";
 import Home from "./components/screens/Home";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { setDataSuccess } from './actions/home.action'
+import { setDataSuccess } from "./actions/home.action";
+import ImportBibtex from "./components/screens/ImportBibtex";
 import ArticleDetails from "./components/screens/ArticleDetails";
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       articles: []
-    }
+    };
   }
   render() {
     return (
@@ -22,6 +23,8 @@ class App extends Component {
           <Switch>
             <Route path="/" exact component={Login} />
             <Route path="/home" exact component={Home} />
+            <Route path="/import" exact component={ImportBibtex} />
+            <Route path="/detail/:id" exact component={ArticleDetails} />
           </Switch>
         </div>
       </BrowserRouter>
@@ -43,18 +46,20 @@ class App extends Component {
       this.setState({ intervalIsSet: null });
     }
   }
-  
+
   // our first get method that uses our backend api to
   // fetch data from our data base
-   getDataFromDb() {
-    fetch('http://localhost:3001/articles')
-      .then(results => results.json())
-      .then(data => this.setState({ articles: data }))
-      .catch(function(err) {console.log(err)});
-  }  
+  getDataFromDb() {
+    fetch("http://localhost:3001/articles")
+      .then((results) => results.json())
+      .then((data) => this.setState({ articles: data }))
+      .catch(function(err) {
+        console.log(err);
+      });
+  }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     data: state.homeReducer.data
   };

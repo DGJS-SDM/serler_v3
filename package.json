@@ -1,29 +1,50 @@
 {
-  "name": "my-app",
+  "name": "serler",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"cd BackEnd && node server.js\" \"cd FrontEnd && npm start\"",
+    "start": "concurrently \"cd BackEnd && npm start\" \"cd FrontEnd && npm start\"",
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DGJS-SDM/serler_v2.git"
+    "url": "git+https://github.com/DGJS-SDM/serler_v3.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "heroku"
+  ],
+  "author": "Team 15",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DGJS-SDM/serler_v2/issues"
+    "url": "https://github.com/DGJS-SDM/serler_v3/issues"
   },
-  "homepage": "https://github.com/DGJS-SDM/serler_v2#readme",
+  "homepage": "https://github.com/DGJS-SDM/serler_v3#readme",
   "dependencies": {
+    "axios": "^0.19.0",
+    "bibtex-parse-js": "0.0.24",
+    "body-parser": "^1.19.0",
     "concurrently": "^4.1.2",
-    "react-scripts": "^3.1.1"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "material-table": "^1.52.0",
+    "materialize-css": "^1.0.0",
+    "mongoose": "^5.7.5",
+    "morgan": "^1.9.1",
+    "node": "^12.12.0",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.2.0",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
 }

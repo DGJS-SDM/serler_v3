@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
-import YearPicker from "react-year-picker";
-import "react-datepicker/dist/react-datepicker.css";
 import M from "materialize-css";
 import "./Home.css";
 import Header from "../commons/Header";
@@ -14,13 +12,22 @@ import { getDataByCondition } from "../../actions/home.action";
 class Home extends Component {
   constructor(props) {
     super(props);
-    //Declare and set default values for state
+    // Declare and set default values for state
     this.state = {
       articles: [],
       type: "keywords", // keywords - filters
       search: "",
-      from: new Date(),
-      to: new Date(),
+
+      // The below 4 variables are applied for year range
+      min: 1960,
+      // the 'max' value of year is the current
+      max: new Date().getFullYear(),
+      // the intial 'from' value is the current minus 1
+      from: new Date().getFullYear() - 1,
+      // the intial 'to' value is the current year
+      to: new Date().getFullYear(),
+
+      // Declare and assign initial values to the checkboxes that will appear on the popup for selecting columns
       checkBox: {
         analyst: true,
         author: false,
@@ -34,7 +41,13 @@ class Home extends Component {
         type: true,
         year: true
       },
+
+      // Declare the fields and their fixed values (if any) that will be used on the search filter
       field: [
+        {
+          id: 0,
+          name: "Select Category"
+        },
         {
           id: 1,
           name: "Author"
@@ -49,13 +62,16 @@ class Home extends Component {
           option: [
             { name: "BDD", value: "BDD" },
             { name: "Burn down charts", value: "Burn down charts" },
-            { name: "Code sharing", value: "seCode sharingMtd03" },
+            { name: "Code sharing", value: "Code sharing" },
             { name: "Continuous integration", value: "Continuous integration" },
             { name: "Daily standup", value: "Daily standup" },
             { name: "Meeting", value: "Meeting" },
             { name: "Pair programming", value: "Pair programming" },
             { name: "Planning poker", value: "Planning poker" },
-            { name: "Requirements prioritisation", value: "Requirements prioritisation" },
+            {
+              name: "Requirements prioritisation",
+              value: "Requirements prioritisation"
+            },
             { name: "Restrospectives", value: "Restrospectives" },
             { name: "Storyboards", value: "Storyboards" },
             { name: "TDD", value: "TDD" },
@@ -68,22 +84,49 @@ class Home extends Component {
           name: "SE Methodology",
           option: [
             { name: "Agile", value: "Agile" },
-            { name: "Aspect Oriented Development", value: "Aspect Oriented Development" },
+            {
+              name: "Aspect Oriented Development",
+              value: "Aspect Oriented Development"
+            },
             { name: "Clean Room", value: "Clean Room" },
             { name: "Cloud computing", value: "Cloud computing" },
             { name: "Crystal", value: "Crystal" },
-            { name: "Domain Driven Development", value: "Domain Driven Development" },
-            { name: "Feature Driven Development", value: "Feature Driven Development" },
+            {
+              name: "Domain Driven Development",
+              value: "Domain Driven Development"
+            },
+            {
+              name: "Feature Driven Development",
+              value: "Feature Driven Development"
+            },
             { name: "Formal methods", value: "Formal methods" },
-            { name: "Model Driven Development", value: "Model Driven Development" },
-            { name: "Problem Driven Development", value: "Problem Driven Development" },
-            { name: "Product Driven Development", value: "Product Driven Development" },
+            {
+              name: "Model Driven Development",
+              value: "Model Driven Development"
+            },
+            {
+              name: "Problem Driven Development",
+              value: "Problem Driven Development"
+            },
+            {
+              name: "Product Driven Development",
+              value: "Product Driven Development"
+            },
             { name: "Scrum", value: "Scrum" },
-            { name: "Service Oriented Development", value: "Service Oriented Development" },
-            { name: "Spiral Rational Unified Process", value: "Spiral Rational Unified Process" },
-            { name: "Values Driven Development", value: "Values Driven Development" },
+            {
+              name: "Service Oriented Development",
+              value: "Service Oriented Development"
+            },
+            {
+              name: "Spiral Rational Unified Process",
+              value: "Spiral Rational Unified Process"
+            },
+            {
+              name: "Values Driven Development",
+              value: "Values Driven Development"
+            },
             { name: "Waterfall", value: "Waterfall" },
-            { name: "XP", value: "seXPMty17" }
+            { name: "XP", value: "XP" }
           ]
         },
         {
@@ -98,16 +141,18 @@ class Home extends Component {
             { name: "Book", value: "Book" },
             { name: "Master thesis", value: "Master thesis" },
             { name: "Misc", value: "Misc" },
-            { name: "Phd thesis", value: "Phd thesis" }
+            { name: "Phd thesis", value: "Phd thesis" },
+            { name: "Conference", value: "Conference" },
+            { name: "Journal", value: "Journal" }
           ]
         }
       ],
 
-      // Each condition row contains 4 elements: syntax, field, field value
+      // Each condition row contains 4 elements: syntax, field, operator and field value
       conditions: [
         {
-          syntax: "AND", // AND - OR - OR NOT
-          field: 1, // ID của field
+          syntax: "AND", // AND - OR - NOT
+          field: 0, // field ID
           operator: "Equal to", // Equal to - Not Equal to
           value: "" // field's value
         }
@@ -267,29 +312,47 @@ class Home extends Component {
   };
 
   // Change value on 'from year'
-  onFromChange = date => {
-    this.setState({
-      from: date
-    });
+  onFromChange = event => {
+    const { to } = this.state;
+    const date = event.target.value;
+    // This condition is about to calculate the range of 'from' year ends by 'to' year minus 1
+    if (date >= to) {
+      this.setState({
+        from: parseInt(to - 1)
+      });
+    } else {
+      this.setState({
+        from: parseInt(date)
+      });
+    }
   };
 
   // Change value on 'to year'
-  onToChange = date => {
-    this.setState({
-      to: date
-    });
+  onToChange = event => {
+    const { from } = this.state;
+    const date = event.target.value;
+    // This condition is about to calculate the range of 'to' year starts from 'from' year plus 1
+    if (date <= from) {
+      this.setState({
+        to: parseInt(from + 1)
+      });
+    } else {
+      this.setState({
+        to: parseInt(date)
+      });
+    }
   };
   // -------------------------- END Select Year Range --------------------------
 
-  // -------------------------- Set values for Filter Pannel --------------------------
+  // -------------------------- Set values for Filter Panel --------------------------
   // Add one more filter row
   onAddMoreCondition = index => {
     const { conditions } = this.state;
     const newCondition = {
-      syntax: "AND", // AND - OR - OR NOT
-      field: 1, // ID của field
+      syntax: "AND", // AND - OR - NOT
+      name: "",
       operator: "Equal to", // Equal to - Not Equal to
-      value: "" // Giá trị của condition
+      value: ""
     };
     conditions.splice(index + 1, 0, newCondition);
     this.setState({
@@ -333,7 +396,7 @@ class Home extends Component {
     });
   };
 
-  // Change the value of operator dropdown on a specified index row
+  // Change the value of Operator dropdown on a specified index row
   onDropDownOperatorChange = (event, index) => {
     const { conditions } = this.state;
     conditions[index].operator = event.target.value;
@@ -359,7 +422,7 @@ class Home extends Component {
       conditions
     });
   };
-  //-------------------------- END Set values for Filter Pannel --------------------------
+  //-------------------------- END Set values for Filter Panel --------------------------
 
   // -------------------------- FUNCTION Press Button Search --------------------------
   onPressButtonSearch = () => {
@@ -370,7 +433,7 @@ class Home extends Component {
   // -------------------------- END FUNCTION Press Button Search -----------------------
 
   // -------------------------- RENDER TOP SECTIONS --------------------------
-  // Panel to select either "Search by Keywords" or "Search by Filters"
+  // This row is about to select either "Search by Keywords" or "Search by Filters"
   renderSearchSelectBox() {
     const { type } = this.state;
     return (
@@ -449,36 +512,26 @@ class Home extends Component {
     return null;
   }
 
-  // Row select Year Range and Search Button
+  // this row shows Year Range and Search Button
   renderFromToSection() {
-    const { from, to } = this.state;
     return (
       <div className="row" style={{ marginTop: 10 }}>
-        <div className="col s10">
+        <div className="col s2" />
+
+        <div className="col s8">
           <div className="row">
-            <div className="col s2">
+            <div className="col s4">
               <p style={{ textAlign: "left" }}>Year range:</p>
             </div>
             <div className="col s1">
-              <p style={{ textAlign: "left" }}>From: </p>
+              <p style={{ textAlign: "right" }}>From </p>
             </div>
-            <div className="col s2" style={{ textAlign: "left" }}>
-              <YearPicker
-                selected={from}
-                onChange={date => this.onFromChange(date)}
-                dateFormat="yyyy"
-              />
+            <div className="col s3">{this.renderFromDropDown()}</div>
+
+            <div className="col s1">
+              <p style={{ textAlign: "right" }}>To </p>
             </div>
-            <div className="col s2">
-              <p style={{ textAlign: "right" }}>To: </p>
-            </div>
-            <div className="col s2">
-              <YearPicker
-                selected={to}
-                onChange={date => this.onToChange(date)}
-                dateFormat="yyyy"
-              />
-            </div>
+            <div className="col s3">{this.renderToDropDown()}</div>
           </div>
         </div>
 
@@ -496,6 +549,57 @@ class Home extends Component {
     );
   }
 
+  renderFromDropDown() {
+    const { from, to, min } = this.state;
+    const options = [];
+    // the array values of 'from' year will start from 'min' to the 'to' year minus 1
+    for (let i = 0; i < to - min; i++) {
+      const year = min + i;
+      options.push(
+        <option key={i} value={year}>
+          {year}
+        </option>
+      );
+    }
+    return (
+      <select
+        className="browser-default"
+        value={from}
+        onChange={e => {
+          this.onFromChange(e);
+        }}
+      >
+        {options}
+      </select>
+    );
+  }
+
+  renderToDropDown() {
+    const { from, to, max } = this.state;
+    const options = [];
+    // the array values of 'to' year will start from 'from' year plus 1 to the 'max'
+    for (let i = 1; i <= max - from; i++) {
+      const year = from + i;
+      options.push(
+        <option key={i} value={year}>
+          {year}
+        </option>
+      );
+    }
+    return (
+      <select
+        className="browser-default"
+        value={to}
+        onChange={e => {
+          this.onToChange(e);
+        }}
+      >
+        {options}
+      </select>
+    );
+  }
+
+  // ------------------ Render Condition Section -----------------
   renderConditionSection() {
     const { conditions } = this.state;
     if (conditions) {
@@ -506,6 +610,7 @@ class Home extends Component {
     return null;
   }
 
+  // ---------------- Render one signle condition row -----------------
   renderSingleCondition(condition, index) {
     return (
       <div className="row condition-row" key={index}>
@@ -530,9 +635,10 @@ class Home extends Component {
     );
   }
 
+  // FirstField is the syntax field (AND/OR/NOT)
   renderSingleConditionFirstField(condition, index) {
     if (index === 0) {
-      // Check if this is the first condition row
+      // Check if this is the first condition row, then not appear
       return null;
     }
     return (
@@ -544,13 +650,13 @@ class Home extends Component {
         value={condition.syntax}
       >
         <option value="AND">AND</option>
-        <option value="AND NOT">AND NOT</option>
         <option value="OR">OR</option>
-        <option value="OR NOT">OR NOT</option>
+        <option value="NOT">NOT</option>
       </select>
     );
   }
 
+  // SecondField is the Category field
   renderSingleConditionSecondField(condition, index) {
     const { field } = this.state;
     if (field) {
@@ -576,6 +682,7 @@ class Home extends Component {
     return null;
   }
 
+  // ThirdField is the operation field (Equal to/ Not equal to)
   renderSingleConditionThirdField(condition, index) {
     return (
       <select
@@ -591,11 +698,12 @@ class Home extends Component {
     );
   }
 
+  // LastField is the value(s) of the SecondField
   renderSingleConditionLastField(condition, index) {
     const { field } = this.state;
     const selectedField = field.find(f => f.id === condition.field);
     if (selectedField && selectedField.option) {
-      // If the selected field got fixed value list, then show up.
+      // If the selected field got fixed value list, then show them up.
       const fieldOptions = selectedField.option.map((f, i) => {
         return (
           <option key={i} value={f.value}>
@@ -615,7 +723,7 @@ class Home extends Component {
         </select>
       );
     } else if (selectedField && !selectedField.option) {
-      // Otherwise, show up the textbox to input value
+      // Otherwise, show up the textbox to type in value
       return (
         <input
           type="text"
@@ -630,7 +738,9 @@ class Home extends Component {
     return null;
   }
 
+  // ConditionButton includes 'AddMoreCondition' button and 'RemoveCondition' button
   renderSingleConditionButton(index) {
+    // On the first condition row, just have the 'add' button only to add more condition
     if (index === 0) {
       return (
         <div className="row">
@@ -650,6 +760,7 @@ class Home extends Component {
         </div>
       );
     }
+    // From the second row will have both 'add' and 'remove' button to either add more or remove condition
     return (
       <div className="row">
         <div className="col">
@@ -680,7 +791,9 @@ class Home extends Component {
         </div>
       </div>
     );
+    // ---------------- END Render one signle condition row -----------------
   }
+  // -------------- END Render Condition Section ---------------
 
   renderTopSection() {
     return (
@@ -702,7 +815,7 @@ class Home extends Component {
   // -------------------------- END RENDER TOP SECTIONS --------------------------
 
   // -------------------------- RENDER BOTTOM SECTIONS --------------------------
-  // Declare popup that contain the list of checkboxes to edit the visibility of columns
+  // Declare popup that contains the list of checkboxes to edit the visibility of columns
   renderModalCheckBox() {
     const { checkBox } = this.state;
     return (
@@ -849,7 +962,10 @@ class Home extends Component {
     // Check the conditions of the checkboxes in order to show the selected columns only
     let columns = [];
     if (checkBox.type) {
-      columns = [...columns, { title: "Type", field: "article_publication_type" }];
+      columns = [
+        ...columns,
+        { title: "Type", field: "article_publication_type" }
+      ];
     }
     if (checkBox.title) {
       columns = [...columns, { title: "Title", field: "article_title" }];
@@ -864,13 +980,16 @@ class Home extends Component {
       columns = [...columns, { title: "SE Method", field: "article_seMethod" }];
     }
     if (checkBox.author) {
-      columns = [...columns, { title: "Author", field: "article_author" }];
+      columns = [...columns, { title: "Author", field: "article_authors" }];
     }
     if (checkBox.doi) {
       columns = [...columns, { title: "DOI", field: "article_doi" }];
     }
     if (checkBox.participants) {
-      columns = [...columns, { title: "Participants", field: "article_participants" }];
+      columns = [
+        ...columns,
+        { title: "Participants", field: "article_participants" }
+      ];
     }
     if (checkBox.researchQuestion) {
       columns = [
@@ -891,12 +1010,8 @@ class Home extends Component {
       columns = [...columns, { title: "Analyst", field: "article_analyst" }];
     }
 
-    const option = {
-      search: false,
-      showTitle: false
-    };
     return (
-      //List of checkboxes to edit the visibility of columns & result table
+      // The <div> tag below is Search Result table
       <div
         className="row"
         style={{
@@ -911,13 +1026,18 @@ class Home extends Component {
         </div>
         <div className="col s12" id="tableSection">
           <MaterialTable
-            options={option}
+            options={{
+              search: false,
+              showTitle: false,
+              pageSize: 10,
+              pageSizeOptions: [5, 10, 20, 50]
+            }}
             columns={columns}
             data={data}
             style={{ boxShadow: "none", borderBottom: 0 }}
             // When click on a row, get details of selected record then push the details to the screen 'article-details
-            onRowClick={(e, detail) => {
-              this.props.history.push("/article-details", { detail: detail });
+            onRowClick={(e, rowData) => {
+              this.props.history.push("/detail/" + rowData._id);
             }}
           />
         </div>
@@ -929,13 +1049,13 @@ class Home extends Component {
   render() {
     return (
       <div style={{ minHeight: "100vh" }}>
-        <Header title="Home" />
         <div className="container">
+          <Header title="Home" />
           {this.renderTopSection()}
           {this.renderBottomSection()}
           {this.renderModalCheckBox()}
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
