@@ -5,7 +5,7 @@
   "engines": {
     "node": "12.8.0",
 	"npm": "6.10.2"
-  }
+  },
   "scripts": {
     "start": "concurrently \"cd BackEnd && npm start\" \"cd FrontEnd && npm start\"",
     "test": "mocha"
