@@ -1010,12 +1010,8 @@ class Home extends Component {
       columns = [...columns, { title: "Analyst", field: "article_analyst" }];
     }
 
-    const option = {
-      search: false,
-      showTitle: false
-    };
     return (
-      // List of checkboxes to edit the visibility of columns & result table
+      // The <div> tag below is Search Result table
       <div
         className="row"
         style={{
@@ -1030,7 +1026,12 @@ class Home extends Component {
         </div>
         <div className="col s12" id="tableSection">
           <MaterialTable
-            options={option}
+            options={{
+              search: false,
+              showTitle: false,
+              pageSize: 10,
+              pageSizeOptions: [5, 10, 20, 50]
+            }}
             columns={columns}
             data={data}
             style={{ boxShadow: "none", borderBottom: 0 }}
