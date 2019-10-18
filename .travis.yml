@@ -3,9 +3,3 @@ node_js:
   - lts/*
 script:
   - "npm test"
-deploy:
-  provider: heroku
-  api_key: EPv1t7L1yKclQ_jD4GN7Dg
-  app:
-    master: serler-v3-staging
-    production: serler-v3-production

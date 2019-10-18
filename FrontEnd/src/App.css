@@ -1,22 +1,6 @@
 .App {
   text-align: center;
 }
-span.thick {
-  font-weight: bold;
-}
-h6.thick-blue {
-  font-weight: bolder;
-  color: blue;
-}
-table,
-th,
-td {
-  border: 0px solid black;
-}
-
-table.article-detail-tb {
-  border-collapse: collapse;
-}
 
 .App-logo {
   height: 40vmin;
