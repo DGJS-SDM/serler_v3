@@ -28,20 +28,30 @@ export const getDataByCondition = condition => dispatch => {
     };
 
     //Takes in the condition array, and a list of articles
-function dynamicSearch(conditions, currList)
+function dynamicSearch(conditions, inputList)
 {
-  var i = 0;
-  while(i<conditions.length) //while there are conditions to fulfil
+  let newList = inputList.filter(queryBuilder(conditions, 0)); //first query
+  let i = 1; // is 1 because the first(0th) query is already applied
+
+  while(i<conditions.length) //while there are more than 1 condition to fill
   {
-    currList = currList.filter(queryBuilder(conditions, i)); //overwrite the list with the filtered list based on the condition applied
-    i++; //increment so next iteration, the next condition is applied, and so loop can eventually break.
+    //If OR
+    if(conditions[i].syntax === "OR")
+    {
+      let tempList = inputList.filter(queryBuilder(conditions, i)); //store list filter applied on entire list
+      newList = newList.concat(tempList); //Merge with the returning list
+    } 
+    else
+    {
+      newList = newList.filter(queryBuilder(conditions, i)); //overwrite the list with the filtered list based on the condition applied
+    }
+    i++; //increment the iterator
   }
 
-  return currList;
+  newList = [...new Set(newList)]; //removing duplicates by converting to set and back to array
+  return newList;
 }
-    
-// CURRENT BUG -- When syntax and operator are both negative, it does not apply the double negative yet. 
-// Need to separate into two different if statements for the double negative to apply. Unsure if required so havent done. .
+
 function queryBuilder(conditions, i)
 {
   var myCond = conditions[i]; // The current condition thats being applied.
@@ -57,27 +67,33 @@ function queryBuilder(conditions, i)
     switch(myCond.field) {
       case 1: //author
         authQ = StringCompare(x.article_authors, myCond.value); //HELPER FUNCTION SEE BELOW
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { authQ = !authQ }; 
+        if (myCond.operator === "Not equal") { authQ = !authQ }; 
+        if (myCond.syntax === "NOT") { authQ = !authQ }; 
         return authQ
       case 2: //doi
         DOIQ = (x.article_doi === parseInt(myCond.value));
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { DOIQ = !DOIQ }; // if NOT, negate the result. 
+        if (myCond.operator === "Not equal") { DOIQ = !DOIQ }; 
+        if (myCond.syntax === "NOT") { DOIQ = !DOIQ };  // if NOT, negate the result. 
         return DOIQ;
       case 3: //SE method
         seMethQ = StringCompare(x.article_seMethod, myCond.value);
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { seMethQ = !seMethQ };
+        if (myCond.operator === "Not equal") { seMethQ = !seMethQ }; 
+        if (myCond.syntax === "NOT") { seMethQ = !seMethQ }; 
         return seMethQ;
       case 4: //SE methodology
         seMethodQ = StringCompare(x.article_seMethodology, myCond.value);
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { seMethodQ = !seMethodQ };
+        if (myCond.operator === "Not equal") { seMethodQ = !seMethodQ }; 
+        if (myCond.syntax === "NOT") { seMethodQ = !seMethodQ }; 
         return seMethodQ;
       case 5: //Title
         titQ = StringCompare(x.article_title, myCond.value);
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { titQ = !titQ };
+        if (myCond.operator === "Not equal") { titQ = !titQ }; 
+        if (myCond.syntax === "NOT") { titQ = !titQ }; 
         return titQ;
       case 6: //Type
         typeQ = StringCompare(x.article_publication_type, myCond.value);
-        if (myCond.operator === "Not equal" || myCond.syntax === "NOT") { typeQ = !typeQ };
+        if (myCond.operator === "Not equal") { typeQ = !typeQ }; 
+        if (myCond.syntax === "NOT") { typeQ = !typeQ }; 
         return typeQ;
       default:
         console.log("Nothing is selected!!"); // If nothing is selected, return true for all.
