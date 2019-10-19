@@ -994,7 +994,7 @@ class Home extends Component {
     if (checkBox.researchQuestion) {
       columns = [
         ...columns,
-        { title: "Research Question", field: "article_researchQuestion" }
+        { title: "Research Question", field: "article_research_question" }
       ];
     }
     if (checkBox.researchResult) {
