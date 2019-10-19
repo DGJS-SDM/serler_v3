@@ -37,7 +37,7 @@ app.use('/articles', articlesRouter);
 
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-};
+});
 
 // launch our backend into a port
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
