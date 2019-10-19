@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	//"run build": "concurrently \" node index.js\" \"cd FrontEnd && npm start\"",
     "start": "node index.js",
 	"heroku-postbuild": "cd FrontEnd && npm install --only=dev && npm install && npm run build",
     "test": "mocha"
