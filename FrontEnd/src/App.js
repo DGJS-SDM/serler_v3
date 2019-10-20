@@ -50,7 +50,7 @@ class App extends Component {
   // our first get method that uses our backend api to
   // fetch data from our data base
   getDataFromDb() {
-    fetch("https://serler-v3-stage.herokuapp.com/articles")
+    fetch("https://localhost:3001/articles")
       .then((results) => results.json())
       .then((data) => this.setState({ articles: data }))
       .catch(function(err) {

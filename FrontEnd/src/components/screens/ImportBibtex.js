@@ -66,7 +66,7 @@ class ImportBibtex extends React.Component {
         article_rating: "0"
       };
       // call the api to add article to database
-      axios.post("https://serler-v3-stage.herokuapp.com/articles/add", obj);
+      axios.post("https://localhost:3001/articles/add", obj);
       this.setState({
         title: "",
         authors: "",
