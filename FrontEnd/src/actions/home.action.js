@@ -15,7 +15,7 @@ export const getDataByCondition = condition => dispatch => {
   console.log(condition);
 
   //Fetch the data from the backend
-  fetch('http://localhost:3001/articles')
+  fetch('https://serler-v3-stage.herokuapp.com/articles')
       .then(results => results.json())
       .then(d => {
         const data = d.articles
