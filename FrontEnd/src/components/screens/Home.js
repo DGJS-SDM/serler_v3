@@ -1012,7 +1012,8 @@ class Home extends Component {
 
     const option = {
       search: false,
-      showTitle: false
+      showTitle: false,
+      pageSize: 10
     };
     return (
       // List of checkboxes to edit the visibility of columns & result table
