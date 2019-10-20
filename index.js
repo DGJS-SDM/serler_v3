@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require("path");
+app.use(express.static(path.join(__dirname, "FrontEnd", "build")));
+
+
 // this is our MongoDB database
 const dbRoute =
   'mongodb+srv://sysAdmin:Sjgd1234@cluster0-qvark.mongodb.net/db_articles?retryWrites=true&w=majority';
@@ -30,6 +34,10 @@ app.use(logger('dev'));
 
 const articlesRouter = require('./routes/articles');
 app.use('/articles', articlesRouter);
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "FrontEnd", "build", "index.html"));
+});
 
 // launch our backend into a port
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
