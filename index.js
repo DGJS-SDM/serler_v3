@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const path = require("path");
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, "FrontEnd", "build")));
 
 
 // this is our MongoDB database
@@ -36,7 +36,7 @@ const articlesRouter = require('./routes/articles');
 app.use('/articles', articlesRouter);
 
 app.get("*", (req, res) => {
-	res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+	res.sendFile(path.join(__dirname, "FrontEnd", "build", "index.html"));
 });
 
 // launch our backend into a port
