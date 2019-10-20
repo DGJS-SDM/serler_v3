@@ -9,3 +9,4 @@ npm install
 
 ## Run
 ```npm start```
+Then, open your web browser and locate to http://localhost:3000
