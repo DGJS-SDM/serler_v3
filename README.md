@@ -18,5 +18,5 @@ npm install --save-dev webpack
 
 ## Run
 To start the application, run the following command:
-```npm start``
+```npm start```
 Then, open your web browser and locate to http://localhost:3001 for the server side and http://localhost:3000 for the client side.
