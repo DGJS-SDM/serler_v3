@@ -25,6 +25,7 @@ npm start
 ```
 Then, open web browser and go to http://localhost:3001 for the server side and http://localhost:3000 for the client side.
 ### Cloud deployment (Heroku)
+#### Initial setting
 1. Create an Heroku Account  
 
 2. Create an App on heroku
@@ -33,11 +34,11 @@ Then, open web browser and go to http://localhost:3001 for the server side and h
 
 4. Associate the development tool (NodeJS) app package to the deployment.  
 
-5. Code Integration  
+#### Code Integration  
 
-5.1 Make sure all the backend files are in the root folder and all the frontend files are in a subfolder called frontend or client 
+1 Make sure all the backend files are in the root folder and all the frontend files are in a subfolder called frontend or client 
 
-5.2 Ensure the server.js (or index.js) is setup to recognise and serve up to heroku Add the follow code:  
+2 Ensure the server.js (or index.js) is setup to recognise and serve up to heroku Add the follow code:  
 
 ```
 const path = require("path");  
@@ -51,7 +52,7 @@ app.get("*", (req, res) => {
 res.sendFile(path.join(__dirname, "FrontEnd", "build", "index.html")); });  
 ```
 
-5.3 Ensure the package.json file is setup to install into heroku Add the following code: 
+3 Ensure the package.json file is setup to install into heroku Add the following code: 
 ```
 
 "scripts": {  
