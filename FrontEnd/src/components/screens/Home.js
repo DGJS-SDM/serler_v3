@@ -29,7 +29,7 @@ class Home extends Component {
 
       // Declare and assign initial values to the checkboxes that will appear on the popup for selecting columns
       checkBox: {
-        analyst: true,
+        analyst: false,
         author: false,
         doi: false,
         participants: false,
@@ -180,7 +180,7 @@ class Home extends Component {
     this.setState({
       checkBox: {
         ...checkBox,
-        title: !checkBox.analyst
+        analyst: !checkBox.analyst
       }
     });
   };
